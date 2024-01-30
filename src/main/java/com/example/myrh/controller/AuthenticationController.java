@@ -23,7 +23,7 @@ import java.util.Arrays;
 public class AuthenticationController {
 
 
-    @Value("${spring.security.oauth2.resourceserver.opaquetoken.client-i}")
+    @Value("${spring.security.oauth2.resourceserver.opaquetoken.client-id}")
     private String clientId;
     @Value("${spring.security.oauth2.resourceserver.opaquetoken.client-secret}")
     private String clientSecret;
@@ -67,6 +67,6 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(new MessageDto("private Content" + name));
     }
-    
+
 
 }
