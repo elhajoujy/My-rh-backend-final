@@ -1,4 +1,4 @@
-package com.example.myrh.config;
+package com.example.myrh.config.security;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -8,11 +8,11 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Component
 public class WebClientConfig {
 
-    @Value("${spring.security.oauth2.resourceserver.opaquetoken.introspection-uri}")
-    private String instrospectUri;
+    @Value("${spring.security.oauth2.resourceserver.opaque-token.introspection-uri}")
+    private String introspectUri;
 
     @Bean
-    public WebClient webClient() {
-        return WebClient.builder().baseUrl(instrospectUri).build();
+    public WebClient userInfoClient() {
+        return WebClient.builder().baseUrl(introspectUri).build();
     }
 }

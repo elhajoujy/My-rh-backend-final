@@ -35,8 +35,7 @@ public class AuthenticationController {
 
     @GetMapping("/auth/url")
     public ResponseEntity<UrlDto> auth() {
-        String url = new GoogleAuthorizationCodeRequestUrl(clientId, "http://locahost:4200", Arrays.asList("profile", "email", "openid")
-
+        String url = new GoogleAuthorizationCodeRequestUrl(clientId, "http://localhost:4200", Arrays.asList("profile", "email", "openid")
         ).build();
         return ResponseEntity.ok(new UrlDto(url));
     }
