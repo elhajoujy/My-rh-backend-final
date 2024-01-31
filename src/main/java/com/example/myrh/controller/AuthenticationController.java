@@ -61,9 +61,7 @@ public class AuthenticationController {
 
     @GetMapping("/private/message")
     public ResponseEntity<MessageDto> privateMessage(@AuthenticationPrincipal(expression = "name") String name
-
     ) {
-
         return ResponseEntity.ok(new MessageDto("private Content" + name));
     }
 
