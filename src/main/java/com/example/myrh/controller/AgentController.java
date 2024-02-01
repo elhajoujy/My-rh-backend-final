@@ -4,6 +4,7 @@ import com.example.myrh.dto.requests.AgentReq;
 import com.example.myrh.dto.responses.AgentRes;
 import com.example.myrh.dto.responses.CompanyRes;
 import com.example.myrh.service.IAgentService;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
