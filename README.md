@@ -30,4 +30,3 @@ docker-compose up -d
 
 ## Contributors 
 - [Elmahdi elhjoujy]()
-- [Abdelmalek Achkif]()
