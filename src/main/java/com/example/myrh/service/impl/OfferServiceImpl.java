@@ -53,7 +53,6 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
     @Override
     public Page<OfferRes> search(int page, int size, String title, String description, String domain, String city, StudyLevel level, String job) {
         Specification<Offer> spec = buildSpecification(title, description, domain, city, level, job);
-
         if (size > 10) {
             size = 10;
         }
@@ -129,8 +128,8 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
             throw new EntityNotFoundException("Company Not Found");
         }
 
-        if(!verifyCompanySubscription(request.getCompany().getId())){
-            throw new BadRequestException("You have reached the limited offers on your pack "+request.getCompany().getSubscription()+" , upgrade your subscription");
+        if (!verifyCompanySubscription(request.getCompany().getId())) {
+            throw new BadRequestException("You have reached the limited offers on your pack " + request.getCompany().getSubscription() + " , upgrade your subscription");
         }
 
         Offer offer = repository.save(mapper.reqToEntity(request));
@@ -160,7 +159,7 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
     @Override
     public JobSeekerOfferInsightsResponse getCandidatesOfferInsights(int seekerId) {
         // : 08-01-2024 avoir des statistiques des offres d'emploi par candidats id
-        JobSeeker jobSeeker = this.jobSeekerRepository.findById(seekerId).orElseThrow(() -> new NotFoundException("Candidate with "+seekerId+" not found"));
+        JobSeeker jobSeeker = this.jobSeekerRepository.findById(seekerId).orElseThrow(() -> new NotFoundException("Candidate with " + seekerId + " not found"));
         JobSeekerOfferInsightsResponse response = new JobSeekerOfferInsightsResponse();
         response.setCandidateId(jobSeeker.getId());
 
@@ -172,13 +171,11 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
 
         this.jobApplicantRepo.getAllById_JobSeeker_id(seekerId).forEach(jobApplicant -> {
 
-            if (jobApplicant.getStatus()== JobApplicationStatus.ACCEPTED) {
+            if (jobApplicant.getStatus() == JobApplicationStatus.ACCEPTED) {
                 nbCandidatesAccepted.set(nbCandidatesAccepted.get() + 1);
-            }
-            else if (jobApplicant.getStatus()== JobApplicationStatus.REFUSED) {
+            } else if (jobApplicant.getStatus() == JobApplicationStatus.REFUSED) {
                 nbCandidatesRefused.set(nbCandidatesRefused.get() + 1);
-            }
-            else if (jobApplicant.getStatus()== JobApplicationStatus.IN_PROCESS) {
+            } else if (jobApplicant.getStatus() == JobApplicationStatus.IN_PROCESS) {
                 nbCandidatesInProcess.set(nbCandidatesInProcess.get() + 1);
             }
             Integer id = jobApplicant.getId().getOffer_id();
@@ -194,7 +191,7 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
         response.setNbCandidatesRefused(nbCandidatesRefused.get());
         response.setNbCandidatesInProcess(nbCandidatesInProcess.get());
         response.setJobSeeker_status(jobSeeker.getStatus());
-        response.setJobSeekerName(jobSeeker.getFirst_name()+" "+jobSeeker.getLast_name());
+        response.setJobSeekerName(jobSeeker.getFirst_name() + " " + jobSeeker.getLast_name());
         return response;
     }
 
@@ -205,9 +202,9 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
     }
 
     @Override
-    public Collection<JobSeekerOfferInsightsResponse> getAllCandidatesOfferInsights(String id , Map<String, String> params) {
+    public Collection<JobSeekerOfferInsightsResponse> getAllCandidatesOfferInsights(String id, Map<String, String> params) {
         //get all jobSeeker which used to apply to this company than call the function before .
-        Company company =  this.companyRepo.findById(Integer.parseInt(id)).orElseThrow(() -> new NotFoundException("Company with "+id+" not found"));
+        Company company = this.companyRepo.findById(Integer.parseInt(id)).orElseThrow(() -> new NotFoundException("Company with " + id + " not found"));
         Collection<JobSeekerOfferInsightsResponse> jobSeekerOfferInsightsResponseCollection = new ArrayList<>();
 //        PageRequest pageRequest = PageRequest.of(Integer.parseInt(params.get("page")), Integer.parseInt(params.get("size")));
         //find offers byt company .... then loop into each offer and get all job application from them
@@ -221,13 +218,13 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
     }
 
     @Override
-    public boolean verifyCompanySubscription(int companyId){
+    public boolean verifyCompanySubscription(int companyId) {
         Company company = companyRepo.findById(companyId).orElseThrow(() -> new EntityNotFoundException("Company not found with the given id"));
         Collection<Offer> offerList = repository.findAllByCompany(company);
 
-        if(company.getSubscription() == SubscriptionStatus.FREEMIUM){
+        if (company.getSubscription() == SubscriptionStatus.FREEMIUM) {
             return offerList.size() < 3;
-        }else if(company.getSubscription() == SubscriptionStatus.BASIC){
+        } else if (company.getSubscription() == SubscriptionStatus.BASIC) {
             return offerList.size() < 10;
         }
         return company.getSubscription() == SubscriptionStatus.PREMIUM;

@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @RestController
-@RequestMapping("myrh/api/v1/offers")
+@RequestMapping("/api/v1/offers")
 @CrossOrigin("*")
 public class OfferController {
     private final IOfferService service;
@@ -36,19 +36,15 @@ public class OfferController {
         return ResponseEntity.ok(response);
     }
 
-/*
-    @GetMapping("")
-    public ResponseEntity<Page<OfferRes>> getAll(@RequestParam int page, @RequestParam int size) {
-        return ResponseEntity.ok(service.getAll(page, size));
-    }
- */
+
     @GetMapping("")
     public ResponseEntity<Page<OfferRes>>
-    search(@RequestParam(required = false , defaultValue = "0") int page , @RequestParam(required = false,defaultValue = "10") int size,@RequestParam(required = false) String title, @RequestParam(required = false) String description, @RequestParam(required = false) String domain,@RequestParam(required = false) String city,@RequestParam(required = false) StudyLevel level,@RequestParam(required = false) String job) {
+    search(@RequestParam(required = false, defaultValue = "1") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam(required = false) String title, @RequestParam(required = false) String description, @RequestParam(required = false) String domain, @RequestParam(required = false) String city, @RequestParam(required = false) StudyLevel level, @RequestParam(required = false) String job) {
         return ResponseEntity.ok(service.
                 search(page, size, title, description, domain, city, level, job)
         );
     }
+
 
     @GetMapping("{id}")
     public ResponseEntity<OfferRes> get(@PathVariable int id) {
@@ -74,16 +70,15 @@ public class OfferController {
     public ResponseEntity<JobSeekerOfferInsightsResponse> getCandidatesOfferInsights(@PathVariable int candidateID) {
         return ResponseEntity.ok(this.insightsService.getCandidatesOfferInsights(candidateID));
     }
+
     @GetMapping("/insights/jobSeeker/company/{companyID}")
     public ResponseEntity<Collection<JobSeekerOfferInsightsResponse>> getAllCandidatesOfferInsights(
             @PathVariable String companyID,
-            @RequestParam(required = false) Map<String,String> params
-            ) {
+            @RequestParam(required = false) Map<String, String> params
+    ) {
         return ResponseEntity.ok(this.insightsService.getAllCandidatesOfferInsights(
                 companyID, params));
     }
-
-
 
 
 }
