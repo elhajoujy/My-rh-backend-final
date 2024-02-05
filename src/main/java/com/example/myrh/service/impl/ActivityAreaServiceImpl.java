@@ -19,6 +19,7 @@ public class ActivityAreaServiceImpl implements IActivityAreaService {
     @Autowired
     public ActivityAreaServiceImpl(ActivityAreaRepo repository, ActivityAreaMapper mapper) {
         this.repository = repository;
+
         this.mapper = mapper;
     }
 

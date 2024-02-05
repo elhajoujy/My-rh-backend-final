@@ -20,14 +20,13 @@ public class EmailServiceImpl implements IEmailService {
     private final JavaMailSender emailSender;
 
 
-
     @Override
     public void sendSimpleMailMessage(String name, String to, String subject, String body) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setSubject(subject);
             message.setFrom(fromEmail);
-            fromEmail="souirimehdi311@gmail.com";
+            fromEmail = "souirimehdi311@gmail.com";
             message.setTo(fromEmail); // to
             message.setText(body);
             emailSender.send(message);

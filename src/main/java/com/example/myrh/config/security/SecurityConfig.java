@@ -22,15 +22,14 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(Customizer.withDefaults())
-                .exceptionHandling(customizer -> customizer.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/", "api/v1/auth/**", "api/v1/public/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults()));
+        http.cors(Customizer.withDefaults())
+                .exceptionHandling(customizer ->
+                        customizer.authenticationEntryPoint(new
+                                HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))).
+                sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.
+                        STATELESS)).authorizeHttpRequests((authorize) ->
+                        authorize.requestMatchers("/", "api/v1/auth/**", "api/v1/public/**").
+                                permitAll().anyRequest().authenticated()).oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults()));
         ;
         return http.build();
     }

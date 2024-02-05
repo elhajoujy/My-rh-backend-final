@@ -43,7 +43,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/url")
-    //TODO:when first the user want to login he will be redirected to this endpoint than he will be redirected to the dis
+    //:when first the user want to login he will be redirected to this endpoint than he will be redirected to the dis
     public ResponseEntity<RedirectUrlDto> auth() {
         String url = new GoogleAuthorizationCodeRequestUrl(clientId, "http://localhost:4200", Arrays.asList("profile", "email", "openid")).build();
         return ResponseEntity.ok(new RedirectUrlDto(url));
