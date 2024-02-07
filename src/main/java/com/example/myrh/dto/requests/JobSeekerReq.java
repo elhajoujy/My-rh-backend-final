@@ -1,11 +1,14 @@
 package com.example.myrh.dto.requests;
 
 import com.example.myrh.model.Company;
+import com.example.myrh.model.Profile;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 @Data
 public class JobSeekerReq {
@@ -30,6 +33,10 @@ public class JobSeekerReq {
     @NotBlank(message = "password field is required")
     @Size(message = "password must not be less than 10 & more than 30 chars", min = 3, max = 30)
     private String password;
+    private int PassedExams;
+    private boolean isAvalidated;
+    private LocalDate lastExamPassedDate;
+    private ProfileRequest profile;
 
 
 
