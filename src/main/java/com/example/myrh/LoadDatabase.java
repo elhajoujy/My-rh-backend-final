@@ -8,6 +8,7 @@ import com.example.myrh.enums.UserStatus;
 import com.example.myrh.model.*;
 import com.example.myrh.repository.*;
 import com.example.myrh.service.*;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
@@ -25,27 +27,11 @@ class LoadDatabase {
     private final QuestionsRepository questionsRepository;
     private final ProfileRepository profileRepository;
     private final AnswerRepository answerRepository;
-
-
-    public LoadDatabase(JobApplicantRepo jobApplicantRepo, JobSeekerRepo jobSeekerRepo, QuestionsRepository questionsRepository, ProfileRepository profileRepository, AnswerRepository answerRepository) {
-        this.jobApplicantRepo = jobApplicantRepo;
-        this.jobSeekerRepo = jobSeekerRepo;
-        this.questionsRepository = questionsRepository;
-        this.profileRepository = profileRepository;
-        this.answerRepository = answerRepository;
-    }
+    private final SaveFakeQuestionsWithAnswers saveFakeQuestionsWithAnswers;
 
 
     @Bean
-    CommandLineRunner initDatabase(
-            ICompanyService companyService,
-            IAgentService agentService,
-            IActivityAreaService profileService,
-            ICityService cityService,
-            IOfferService offerService,
-            JobSeekerRepo jobSeekerRepo,
-            IJobSeekerService jobSeekerService,
-            IJobApplicantService jobApplicantService) {
+    CommandLineRunner initDatabase(ICompanyService companyService, IAgentService agentService, IActivityAreaService profileService, ICityService cityService, IOfferService offerService, JobSeekerRepo jobSeekerRepo, IJobSeekerService jobSeekerService, IJobApplicantService jobApplicantService) {
 
         return args -> {
 
@@ -79,8 +65,7 @@ class LoadDatabase {
 
             OfferReq offer = new OfferReq();
             offer.setTitle("Developpeur / Developpeuse Full stack");
-            offer.setDescription("EYSI, entreprise de développement informatique, cherche un stagiaire à" +
-                    "partir de BAC +2 pour une durée variant entre 2 à 6 mois.");
+            offer.setDescription("EYSI, entreprise de développement informatique, cherche un stagiaire à" + "partir de BAC +2 pour une durée variant entre 2 à 6 mois.");
             offer.setCompany(Company.builder().id(1).build());
             offer.setCity(City.builder().id(1).build());
             offer.setProfile(ActivityArea.builder().id(1).build());
@@ -124,18 +109,19 @@ class LoadDatabase {
     }
 
     private void addListProfile(JobSeeker jobSeeker) {
-        List.of("Java Developer", "Php Developer", "JavaScript developer").forEach(
-                title -> {
-                    Profile profile = new Profile();
-                    profile.setName(title);
-                    profile.setDescription("description of " + title);
-                    profile.setImage("path/to/image");
-                    profile = this.profileRepository.save(profile);
-                    log.info("Preloading Profile  : " + profile.getId() + " " + profile.getName());
-                    addListQuestions(profile);
-                    addListJobSeeker(profile, jobSeeker);
-                }
-        );
+        List.of("Java Developer", "Php Developer", "JavaScript developer").forEach(title -> {
+            Profile profile = new Profile();
+            profile.setName(title);
+            profile.setDescription("description of " + title);
+            profile.setImage("path/to/image");
+            profile = this.profileRepository.save(profile);
+            log.info("Preloading Profile  : " + profile.getId() + " " + profile.getName());
+            addListQuestions(profile);
+            addListJobSeeker(profile, jobSeeker);
+        });
+
+
+        this.saveFakeQuestionsWithAnswers.SaveListQuestionsWithAnswers();
 
 
     }
@@ -146,32 +132,28 @@ class LoadDatabase {
     }
 
     private void addListQuestions(Profile profile) {
-        List.of("What is Java?", "What is Php?", "What is JavaScript?").forEach(
-                title -> {
-                    Question question = new Question();
-                    question.setTitle(title);
-                    question.setDescription("description of " + title);
-                    question.setType("type of " + title);
-                    question.setProfile(profile);
-                    question = this.questionsRepository.save(question);
-                    log.info("Preloading Question  : " + question.getId() + " " + question.getTitle());
-                    addListAnswers(question);
-                }
-        );
+        List.of("What is Java?", "What is Php?", "What is JavaScript?").forEach(title -> {
+            Question question = new Question();
+            question.setTitle(title);
+            question.setDescription("description of " + title);
+            question.setType("type of " + title);
+            question.setProfile(profile);
+            question = this.questionsRepository.save(question);
+            log.info("Preloading Question  : " + question.getId() + " " + question.getTitle());
+            addListAnswers(question);
+        });
     }
 
     private void addListAnswers(Question question) {
-        List.of("Java is a programming language", "Php is a programming language", "JavaScript is a programming language").forEach(
-                title -> {
-                    Answer answer = new Answer();
-                    answer.setTitle(title);
-                    answer.setDescription("description of " + title);
-                    answer.setCorrect(false);
-                    answer.setQuestion(question);
-                    answer = this.answerRepository.save(answer);
-                    log.info("Preloading Answer  : " + answer.getId() + " " + answer.getTitle());
-                }
-        );
+        List.of("Java is a programming language", "Php is a programming language", "JavaScript is a programming language").forEach(title -> {
+            Answer answer = new Answer();
+            answer.setTitle(title);
+            answer.setDescription("description of " + title);
+            answer.setCorrect(false);
+            answer.setQuestion(question);
+            answer = this.answerRepository.save(answer);
+            log.info("Preloading Answer  : " + answer.getId() + " " + answer.getTitle());
+        });
     }
 
     private void saveFakeJobApplication() {

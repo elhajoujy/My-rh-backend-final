@@ -8,6 +8,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -18,6 +19,6 @@ public class QuestionResponse {
     private String description;
     private String type;
     private Profile profile;
-  //  private List<AnswerResponse> answers;
+    private List<AnswerResponse> answers = new ArrayList<>();
 
 }
