@@ -6,8 +6,7 @@ import com.example.myrh.enums.JobApplicationStatus;
 import com.example.myrh.enums.StudyLevel;
 import com.example.myrh.enums.UserStatus;
 import com.example.myrh.model.*;
-import com.example.myrh.repository.JobApplicantRepo;
-import com.example.myrh.repository.JobSeekerRepo;
+import com.example.myrh.repository.*;
 import com.example.myrh.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +14,25 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 class LoadDatabase {
 
     private static final Logger log = LoggerFactory.getLogger(LoadDatabase.class);
     private final JobApplicantRepo jobApplicantRepo;
+    private final JobSeekerRepo jobSeekerRepo;
+    private final QuestionsRepository questionsRepository;
+    private final ProfileRepository profileRepository;
+    private final AnswerRepository answerRepository;
 
-    public LoadDatabase(JobApplicantRepo jobApplicantRepo) {
+
+    public LoadDatabase(JobApplicantRepo jobApplicantRepo, JobSeekerRepo jobSeekerRepo, QuestionsRepository questionsRepository, ProfileRepository profileRepository, AnswerRepository answerRepository) {
         this.jobApplicantRepo = jobApplicantRepo;
+        this.jobSeekerRepo = jobSeekerRepo;
+        this.questionsRepository = questionsRepository;
+        this.profileRepository = profileRepository;
+        this.answerRepository = answerRepository;
     }
 
 
@@ -55,7 +65,6 @@ class LoadDatabase {
             agent.setCompany(Company.builder().id(1).build());
 
 
-
             CityReq city = new CityReq();
             city.setName("Casablanca");
 
@@ -85,18 +94,6 @@ class LoadDatabase {
 
             jobSeeker.setPassword("testtest");
 
-/*
-            JobApplicantId jobApplicantId = new JobApplicantId();
-            jobApplicantId.setJobSeeker_id(10);
-            jobApplicantId.setOffer_id(1);
-
-            JobApplicantReq jobApplicant = new JobApplicantReq();
-            jobApplicant.setId(jobApplicantId);
-            jobApplicant.setJobSeeker(jobSeeker);
-            //jobApplicant.setIsViewed(true);
-
- */
-
 
             log.info("Preloading Company 1: " + companyService.create(c1).toString());
             log.info("Preloading Agent 1 : " + agentService.create(agent).toString());
@@ -122,10 +119,62 @@ class LoadDatabase {
         jobSeeker.setStatus(UserStatus.ONLINE);
         jobSeeker = jobSeekerRepo.save(jobSeeker);
         log.info("Preloading JobSeeker  : " + jobSeeker.getId() + " " + jobSeeker.getFirst_name() + " " + jobSeeker.getLast_name());
+        addListProfile(jobSeeker);
 
     }
 
-    private void saveFakeJobApplication(){
+    private void addListProfile(JobSeeker jobSeeker) {
+        List.of("Java Developer", "Php Developer", "JavaScript developer").forEach(
+                title -> {
+                    Profile profile = new Profile();
+                    profile.setName(title);
+                    profile.setDescription("description of " + title);
+                    profile.setImage("path/to/image");
+                    profile = this.profileRepository.save(profile);
+                    log.info("Preloading Profile  : " + profile.getId() + " " + profile.getName());
+                    addListQuestions(profile);
+                    addListJobSeeker(profile, jobSeeker);
+                }
+        );
+
+
+    }
+
+    private void addListJobSeeker(Profile profile, JobSeeker jobSeeker) {
+        jobSeeker.setProfile(profile);
+
+    }
+
+    private void addListQuestions(Profile profile) {
+        List.of("What is Java?", "What is Php?", "What is JavaScript?").forEach(
+                title -> {
+                    Question question = new Question();
+                    question.setTitle(title);
+                    question.setDescription("description of " + title);
+                    question.setType("type of " + title);
+                    question.setProfile(profile);
+                    question = this.questionsRepository.save(question);
+                    log.info("Preloading Question  : " + question.getId() + " " + question.getTitle());
+                    addListAnswers(question);
+                }
+        );
+    }
+
+    private void addListAnswers(Question question) {
+        List.of("Java is a programming language", "Php is a programming language", "JavaScript is a programming language").forEach(
+                title -> {
+                    Answer answer = new Answer();
+                    answer.setTitle(title);
+                    answer.setDescription("description of " + title);
+                    answer.setCorrect(false);
+                    answer.setQuestion(question);
+                    answer = this.answerRepository.save(answer);
+                    log.info("Preloading Answer  : " + answer.getId() + " " + answer.getTitle());
+                }
+        );
+    }
+
+    private void saveFakeJobApplication() {
         JobApplicantId jobApplicantId = new JobApplicantId();
         jobApplicantId.setJobSeeker_id(1);
         jobApplicantId.setOffer_id(1);
@@ -134,7 +183,6 @@ class LoadDatabase {
         jobApplicant.setResume("path/to/resume");
         jobApplicant.setStatus(JobApplicationStatus.ACCEPTED);
         jobApplicant.setIsViewed(true);
-
 
 
         //jobApplicant.setJobSeeker(jobSeeker);
