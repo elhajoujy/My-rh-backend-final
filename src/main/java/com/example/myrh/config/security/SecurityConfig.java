@@ -28,8 +28,12 @@ public class SecurityConfig {
                                 HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))).
                 sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.
                         STATELESS)).authorizeHttpRequests((authorize) ->
-                        authorize.requestMatchers("/", "api/v1/auth/**", "api/v1/public/**").
-                                permitAll().anyRequest().authenticated()).oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults()));
+                        authorize.requestMatchers("**").
+                                permitAll()
+             //                   .anyRequest().authenticated()).oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults())
+                        //
+                        )
+        ;
         ;
         return http.build();
     }

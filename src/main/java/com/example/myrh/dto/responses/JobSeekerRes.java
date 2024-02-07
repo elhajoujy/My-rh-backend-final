@@ -4,7 +4,7 @@ import com.example.myrh.model.Offer;
 import com.example.myrh.model.Profile;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -12,7 +12,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class JobSeekerRes {
 
     private int id;
