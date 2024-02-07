@@ -51,9 +51,10 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
             JobSeeker jobSeeker = repository.save(mapper.reqToEntity(request));
             return mapper.toRes(jobSeeker);
         }
-
         JobSeeker jobSeeker = repository.findByEmail(request.getEmail()).get();
         if (!jobSeeker.isEnabled()) {
+            jobSeeker.setPassedExams(0);
+            jobSeeker.setAvalidated(false);
             jobSeeker.setPassword(request.getPassword());
             jobSeeker.setImage(request.getImage());
             repository.save(jobSeeker);
