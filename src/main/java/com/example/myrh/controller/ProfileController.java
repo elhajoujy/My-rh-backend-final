@@ -21,6 +21,7 @@ public class ProfileController {
 
     @GetMapping("/{id}/quizzes")
     public ResponseEntity<Page<QuestionResponse>> getQuizzesReleatedToProfile(@PathVariable("id") Long profileId, @RequestParam Map<String, String> queryParams) {
-        return ResponseEntity.ok(quizService.getListOfQuestions(profileId, queryParams));
+        return ResponseEntity.ok(
+                quizService.getListOfQuestions(profileId, queryParams));
     }
 }

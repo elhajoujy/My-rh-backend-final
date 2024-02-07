@@ -18,7 +18,8 @@ public class QuestionResponse {
     private String title;
     private String description;
     private String type;
-    private Profile profile;
+//    private Profile profile;
+    private ProfileResponse profileResponse;
     private List<AnswerResponse> answers = new ArrayList<>();
 
 }

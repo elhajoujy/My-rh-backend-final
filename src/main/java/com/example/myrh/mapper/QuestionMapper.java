@@ -26,9 +26,9 @@ public class QuestionMapper implements IMapper<Question, QuestionRequest, Questi
     public QuestionResponse toQuestionResponseWithAnswers(Question question) {
         QuestionResponse questionResponse = modelMapper.map(question, QuestionResponse.class);
         // Add answers to question response
-        question.getAnswers().forEach(
-                answer -> questionResponse.getAnswers().add(answerMapper.toRes(answer))
-        );
+//        question.getAnswers().forEach(
+//                answer -> questionResponse.getAnswers().add(answerMapper.toRes(answer))
+//        );
         return questionResponse;
     }
 
