@@ -24,7 +24,7 @@ public class JobSeeker extends Person {
     @ManyToOne(fetch = FetchType.LAZY)
     private Profile profile;
 
-    // The entity that specifies the @JoinTable is the owning side of the relationship and
+    // The entity that, specifies the @JoinTable is the owning side of the relationship and
     // the entity that specifies the mappedBy attribute is the inverse side.
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {

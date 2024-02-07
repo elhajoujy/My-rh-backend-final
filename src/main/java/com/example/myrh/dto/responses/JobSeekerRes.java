@@ -1,8 +1,13 @@
 package com.example.myrh.dto.responses;
 
 import com.example.myrh.model.Offer;
+import com.example.myrh.model.Profile;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +22,9 @@ public class JobSeekerRes {
     private String password;
     private String image;
     private boolean isEnabled;
+    private boolean isAvalidated;
+    private LocalDate lastExamPassedDate;
+    private ProfileResponse profile;
     //Set<Offer> offers = new HashSet<>();
 
 }
