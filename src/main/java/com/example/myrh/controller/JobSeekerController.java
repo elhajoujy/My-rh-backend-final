@@ -23,7 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("myrh/api/v1/jobSeekers")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class JobSeekerController {
     private final IJobSeekerService service;
     private final IJobSeekerFilterService jobSeekerFilterService;
