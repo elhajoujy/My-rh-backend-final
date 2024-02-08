@@ -19,7 +19,7 @@ public class GoogleOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
     @Override
     public OAuth2AuthenticatedPrincipal introspect(String token) {
         UserInfo userInfo = userInfoClient.get()
-                .uri( uriBuilder -> uriBuilder
+                .uri(uriBuilder -> uriBuilder
                         .path("/oauth2/v3/userinfo")
                         .queryParam("access_token", token)
                         .build())

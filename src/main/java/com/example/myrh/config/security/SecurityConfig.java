@@ -18,7 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final WebClient userInfoClient;
+//    private final WebClient userInfoClient;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,16 +29,13 @@ public class SecurityConfig {
                 sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.
                         STATELESS)).authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("**").
-                                permitAll()
-                //                .anyRequest().authenticated()).oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults())
-
-                );
+                                permitAll());
         ;
         return http.build();
     }
 
-    @Bean
-    public OpaqueTokenIntrospector introspector() {
-        return new GoogleOpaqueTokenIntrospector(userInfoClient);
-    }
+//    @Bean
+//    public OpaqueTokenIntrospector introspector() {
+//        return new GoogleOpaqueTokenIntrospector(userInfoClient);
+//    }
 }
