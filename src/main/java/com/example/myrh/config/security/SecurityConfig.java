@@ -30,10 +30,9 @@ public class SecurityConfig {
                         STATELESS)).authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("**").
                                 permitAll()
-             //                   .anyRequest().authenticated()).oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults())
-                        //
-                        )
-        ;
+                //                .anyRequest().authenticated()).oauth2ResourceServer(c -> c.opaqueToken(Customizer.withDefaults())
+
+                );
         ;
         return http.build();
     }
