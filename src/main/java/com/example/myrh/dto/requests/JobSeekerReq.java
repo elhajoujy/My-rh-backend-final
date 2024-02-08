@@ -38,9 +38,6 @@ public class JobSeekerReq {
     private boolean isAvalidated;
     private LocalDate lastExamPassedDate;
     private ProfileRequest profile;
-
-
-
     private String image;
 
 }
