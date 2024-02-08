@@ -27,6 +27,7 @@ public class JobSeekerRes {
     private boolean isEnabled;
     private boolean isAvalidated;
     private LocalDate lastExamPassedDate;
+    private int PassedExams;
     private ProfileResponse profile;
     //Set<Offer> offers = new HashSet<>();
 

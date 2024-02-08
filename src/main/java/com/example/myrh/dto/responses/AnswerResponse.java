@@ -2,12 +2,15 @@ package com.example.myrh.dto.responses;
 
 import com.example.myrh.model.Question;
 import jakarta.persistence.ManyToOne;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class AnswerResponse {
     private Long id;
