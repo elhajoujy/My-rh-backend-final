@@ -2,6 +2,10 @@ package com.example.myrh.dto.responses;
 
 import com.example.myrh.model.Question;
 import jakarta.persistence.ManyToOne;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.*;
 
 @AllArgsConstructor
@@ -13,5 +17,6 @@ public class AnswerResponse {
     private String title;
     private String description;
     private boolean isCorrect;
-    private QuestionResponse question;
+    private String question_id;
+
 }
