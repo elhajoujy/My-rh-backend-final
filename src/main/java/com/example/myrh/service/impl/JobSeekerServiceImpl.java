@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Map;
 
@@ -73,6 +75,8 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
         return mapper.toRes(jobSeeker);
     }
 
+
+
     @Override
     public JobSeekerRes update(Integer id, JobSeekerRes request) {
         return null;
@@ -99,6 +103,17 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
         }catch (Exception e){
             throw new IllegalStateException("Illegal user status used to filter jobSeekers {ONLINE, OFFLINE , BUSY ,ALL}");
         }
+
+    }
+    @Override
+    public JobSeekerRes updateQuizSatut(Integer jobseekerId, String Datepassedexam,Boolean isvalidated) {
+        JobSeeker existingJobSeeker = repository.findById(jobseekerId)
+                .orElseThrow(() -> new IllegalArgumentException("JobSeeker not found with id: " + jobseekerId));
+
+        existingJobSeeker.setLastExamPassedDate(LocalDate.parse(Datepassedexam));
+        existingJobSeeker.setAvalidated(isvalidated);
+        existingJobSeeker.setPassedExams(existingJobSeeker.getPassedExams()+1);
+        return mapper.toRes(repository.save(existingJobSeeker));
 
     }
 }

@@ -27,7 +27,6 @@ import java.util.Map;
 public class JobSeekerController {
     private final IJobSeekerService service;
     private final IJobSeekerFilterService jobSeekerFilterService;
-
     @Autowired
     public JobSeekerController(IJobSeekerService service, IJobSeekerFilterService jobSeekerFilterService) {
         this.service = service;
@@ -65,5 +64,14 @@ public class JobSeekerController {
 
     }
 
+    @PostMapping("/results")
+    public ResponseEntity<JobSeekerRes> receiveQuizResults(@RequestBody Map<String, Object> quizResultData) {
+        Integer jobseekerId = (Integer) quizResultData.get("jobseekerId");
+        String Datepassedexam = (String) quizResultData.get("Datepassedexam");
+        Boolean isvalidated = (Boolean) quizResultData.get("isvalidated");
+        JobSeekerRes updatedJobSeeker = service.updateQuizSatut(jobseekerId,Datepassedexam,isvalidated);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedJobSeeker);
+    }
 
 }
