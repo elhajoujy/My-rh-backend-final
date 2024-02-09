@@ -40,8 +40,8 @@ public class CompanySubscriptionController {
     //:Subscription PAYMENT
     @PostMapping("/subscribe")
     public ResponseEntity<HttpRes> subscribe(@RequestBody CompanySubscribeRequest request) {
-        boolean isSubscribed  = companySubscriptionService.subscribe(request.getCompanyId(), request.getSubscriptionStatus(), request.getToken());
-        if (!isSubscribed){
+        boolean isSubscribed = companySubscriptionService.subscribe(request.getCompanyId(), request.getSubscriptionStatus(), request.getToken());
+        if (!isSubscribed) {
             return ResponseEntity.badRequest().body(
                     HttpRes.builder()
                             .timeStamp(LocalDateTime.now().toString())
@@ -73,9 +73,10 @@ public class CompanySubscriptionController {
     }
 
 
-    private  void init() {
+    private void init() {
         Stripe.apiKey = this.secretKey;
     }
+
     @PostMapping("/payment")
     public String paymentWithCheckoutPage(@RequestBody CheckoutPayment payment) throws StripeException {
         // We initilize stripe object with the api key
@@ -91,7 +92,7 @@ public class CompanySubscriptionController {
                         SessionCreateParams.LineItem.builder().setQuantity(payment.getQuantity())
                                 .setPriceData(
                                         SessionCreateParams.LineItem.PriceData.builder()
-                                                .setCurrency(payment.getCurrency()).setUnitAmount(payment.getAmount()*100)
+                                                .setCurrency(payment.getCurrency()).setUnitAmount(payment.getAmount() * 100)
                                                 .setProductData(SessionCreateParams.LineItem.PriceData.ProductData
                                                         .builder().setName(payment.getName()).build())
                                                 .build())
