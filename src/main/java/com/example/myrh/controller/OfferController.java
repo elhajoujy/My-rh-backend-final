@@ -39,9 +39,16 @@ public class OfferController {
 
     @GetMapping("")
     public ResponseEntity<Page<OfferRes>>
-    search(@RequestParam(required = false, defaultValue = "1") int page, @RequestParam(required = false, defaultValue = "10") int size, @RequestParam(required = false) String title, @RequestParam(required = false) String description, @RequestParam(required = false) String domain, @RequestParam(required = false) String city, @RequestParam(required = false) StudyLevel level, @RequestParam(required = false) String job) {
+    search(@RequestParam(
+            required = false, defaultValue = "1") int page,
+           @RequestParam(required = false, defaultValue = "10") int size,
+           @RequestParam(required = false) String title, @RequestParam(required = false) String description,
+           @RequestParam(required = false) String domain, @RequestParam(required = false) String city,
+           @RequestParam(required = false) StudyLevel level, @RequestParam(required = false) String job,
+           @RequestParam(required = false) String profile_id
+    ) {
         return ResponseEntity.ok(service.
-                search(page, size, title, description, domain, city, level, job)
+                search(page, size, title, description, domain, city, level, job, profile_id)
         );
     }
 

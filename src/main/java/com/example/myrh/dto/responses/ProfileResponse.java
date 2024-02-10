@@ -7,6 +7,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
 @AllArgsConstructor
 @Getter
 @Setter
@@ -16,6 +17,6 @@ public class ProfileResponse {
     private String name;
     private String description;
     private String image;
-   // private List<QuestionResponse> questions ;
+    // private List<QuestionResponse> questions ;
     //private List<JobSeekerRes> jobSeekers ;
 }

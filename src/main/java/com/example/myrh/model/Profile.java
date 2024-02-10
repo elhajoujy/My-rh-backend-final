@@ -24,6 +24,8 @@ public class Profile {
     private List<Question> questions = new ArrayList<>();
     @OneToMany(mappedBy = "profile")
     private List<JobSeeker> jobSeekers = new ArrayList<>();
+    @OneToMany(mappedBy = "offerProfile")
+    private List<Offer> offers = new ArrayList<>();
 
 
 }

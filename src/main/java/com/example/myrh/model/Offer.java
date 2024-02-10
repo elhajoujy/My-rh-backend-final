@@ -2,6 +2,7 @@ package com.example.myrh.model;
 
 import com.example.myrh.enums.OfferStatus;
 import com.example.myrh.enums.StudyLevel;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,6 +21,7 @@ public class Offer {
     private String description;
     @ManyToOne
     private Company company;
+
     @ManyToOne
     private ActivityArea profile;
     @ManyToOne
@@ -36,9 +38,11 @@ public class Offer {
                     CascadeType.MERGE
             })
     @JoinTable(name = "JobApplicant",
-            joinColumns = { @JoinColumn(name = "offer_id") },
-            inverseJoinColumns = { @JoinColumn(name = "jobSeeker_id") })
+            joinColumns = {@JoinColumn(name = "offer_id")},
+            inverseJoinColumns = {@JoinColumn(name = "jobSeeker_id")})
     Set<JobSeeker> jobSeekers = new HashSet<>();
     private float salary;
     private String image;
+    @ManyToOne
+    private Profile offerProfile;
 }
