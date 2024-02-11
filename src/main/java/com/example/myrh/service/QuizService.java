@@ -15,4 +15,5 @@ public interface QuizService {
     public QuestionResponse createQuestion(QuestionResponse question);
 
     public QuestionResponse updateQuestion(Long questionId, QuestionResponse question);
+
 }
