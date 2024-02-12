@@ -24,8 +24,8 @@ public class JobSeekerRes {
     private String email;
     private String password;
     private String image;
-    private boolean isEnabled;
-    private boolean isAvalidated;
+    private boolean enabled;
+    private boolean validated;
     private LocalDate lastExamPassedDate;
     private int PassedExams;
     private ProfileResponse profile;

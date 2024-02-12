@@ -23,7 +23,7 @@ import java.util.Map;
 
 
 @Service
-public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilterService {
+public class JobSeekerServiceImpl implements IJobSeekerService, IJobSeekerFilterService {
 
     //: IT'S SO MUCH BETTER TO NAME THE JOB SEEKER REPOSITORY ->JobSeekerRepository than repository
     private final JobSeekerRepo repository;
@@ -60,12 +60,12 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
         JobSeeker jobSeeker = repository.findByEmail(request.getEmail()).get();
         if (!jobSeeker.isEnabled()) {
             jobSeeker.setPassedExams(0);
-            jobSeeker.setAvalidated(false);
+            jobSeeker.setValidated(false);
             jobSeeker.setPassword(request.getPassword());
             jobSeeker.setImage(request.getImage());
             repository.save(jobSeeker);
             return mapper.toRes(jobSeeker);
-        }else {
+        } else {
             throw new InternalServerException("Email Already Taken");
         }
     }
@@ -78,7 +78,6 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
         }
         return mapper.toRes(jobSeeker);
     }
-
 
 
     @Override
@@ -96,25 +95,29 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
         //  : 7-01-2024 filter jobSeeker by their state online or offline ?status=online/offline
 
         //  String status= params.getOrDefault("status".toLowerCase(),"online");
-        String status= params.containsKey("status".toLowerCase())?params.get("status").toUpperCase():"";
-        int page = Integer.parseInt(params.getOrDefault("page","0"));
-        int size = Integer.parseInt(params.getOrDefault("size","10"));
+        String status = params.containsKey("status".toLowerCase()) ? params.get("status").toUpperCase() : "";
+        int page = Integer.parseInt(params.getOrDefault("page", "0"));
+        int size = Integer.parseInt(params.getOrDefault("size", "10"));
 
 
-        try{
+        try {
             UserStatus userStatus = UserStatus.valueOf(status);
-            return repository.getAllByStatus(userStatus,PageRequest.of(page,size)).map(mapper::toRes);
-        }catch (Exception e){
+            return repository.getAllByStatus(userStatus, PageRequest.of(page, size)).map(mapper::toRes);
+        } catch (Exception e) {
             throw new IllegalStateException("Illegal user status used to filter jobSeekers {ONLINE, OFFLINE , BUSY ,ALL}");
         }
 
     }
+
     @Override
+
     public JobSeekerRes updateQuizSatut(Integer jobseekerId, String Datepassedexam,Boolean isvalidated) {
 
         JobSeeker existingJobSeeker = repository.findById(jobseekerId)
-                .orElseThrow(() -> new IllegalArgumentException("JobSeeker not found with id: " + jobseekerId));
-        existingJobSeeker.setLastExamPassedDate(LocalDate.parse(Datepassedexam));
+              .orElseThrow(() -> new IllegalArgumentException("JobSeeker not found with id: " + jobseekerId));
+        
+      existingJobSeeker.setLastExamPassedDate(LocalDate.parse(Datepassedexam));
+
         existingJobSeeker.setAvalidated(isvalidated);
         existingJobSeeker.setPassedExams(existingJobSeeker.getPassedExams()+1);
         JobSeeker newJobSeeker = repository.save(existingJobSeeker);
@@ -136,6 +139,11 @@ public class JobSeekerServiceImpl implements IJobSeekerService , IJobSeekerFilte
         jobSeeker.setPassedExams(0);
 
         JobSeeker updatedJobSeeker = repository.save(jobSeeker);
+
+        existingJobSeeker.setValidated(isvalidated);
+        existingJobSeeker.setPassedExams(existingJobSeeker.getPassedExams() + 1);
+        return mapper.toRes(repository.save(existingJobSeeker));
+
 
         return mapper.toRes(updatedJobSeeker);
     }
