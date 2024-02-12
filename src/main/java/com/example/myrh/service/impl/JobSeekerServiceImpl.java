@@ -111,15 +111,15 @@ public class JobSeekerServiceImpl implements IJobSeekerService, IJobSeekerFilter
 
     @Override
 
-    public JobSeekerRes updateQuizSatut(Integer jobseekerId, String Datepassedexam,Boolean isvalidated) {
+    public JobSeekerRes updateQuizSatut(Integer jobseekerId, String Datepassedexam, Boolean isvalidated) {
 
         JobSeeker existingJobSeeker = repository.findById(jobseekerId)
-              .orElseThrow(() -> new IllegalArgumentException("JobSeeker not found with id: " + jobseekerId));
-        
-      existingJobSeeker.setLastExamPassedDate(LocalDate.parse(Datepassedexam));
+                .orElseThrow(() -> new IllegalArgumentException("JobSeeker not found with id: " + jobseekerId));
 
-        existingJobSeeker.setAvalidated(isvalidated);
-        existingJobSeeker.setPassedExams(existingJobSeeker.getPassedExams()+1);
+        existingJobSeeker.setLastExamPassedDate(LocalDate.parse(Datepassedexam));
+
+        existingJobSeeker.setValidated(isvalidated);
+        existingJobSeeker.setPassedExams(existingJobSeeker.getPassedExams() + 1);
         JobSeeker newJobSeeker = repository.save(existingJobSeeker);
 
         if (isvalidated) {
@@ -139,11 +139,6 @@ public class JobSeekerServiceImpl implements IJobSeekerService, IJobSeekerFilter
         jobSeeker.setPassedExams(0);
 
         JobSeeker updatedJobSeeker = repository.save(jobSeeker);
-
-        existingJobSeeker.setValidated(isvalidated);
-        existingJobSeeker.setPassedExams(existingJobSeeker.getPassedExams() + 1);
-        return mapper.toRes(repository.save(existingJobSeeker));
-
 
         return mapper.toRes(updatedJobSeeker);
     }
