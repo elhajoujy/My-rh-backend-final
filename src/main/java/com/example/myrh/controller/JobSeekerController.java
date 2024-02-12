@@ -69,9 +69,13 @@ public class JobSeekerController {
         Integer jobseekerId = (Integer) quizResultData.get("jobseekerId");
         String Datepassedexam = (String) quizResultData.get("Datepassedexam");
         Boolean isvalidated = (Boolean) quizResultData.get("isvalidated");
-        JobSeekerRes updatedJobSeeker = service.updateQuizSatut(jobseekerId,Datepassedexam,isvalidated);
 
+        JobSeekerRes updatedJobSeeker = service.updateQuizSatut(jobseekerId,Datepassedexam,isvalidated);
         return ResponseEntity.status(HttpStatus.OK).body(updatedJobSeeker);
     }
-
+    @GetMapping("/{id}/resetAttempts")
+    public ResponseEntity<JobSeekerRes> countAttemptsToZero(@PathVariable("id") Integer jobseekerId) {
+        JobSeekerRes updatedJobSeeker = service.countAttemptsToZero(jobseekerId);
+        return ResponseEntity.ok(updatedJobSeeker);
+    }
 }

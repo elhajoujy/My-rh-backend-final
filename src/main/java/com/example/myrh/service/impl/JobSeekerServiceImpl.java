@@ -8,6 +8,7 @@ import com.example.myrh.enums.UserStatus;
 import com.example.myrh.mapper.JobSeekerMapper;
 import com.example.myrh.model.JobSeeker;
 import com.example.myrh.repository.JobSeekerRepo;
+import com.example.myrh.service.IEmailService;
 import com.example.myrh.service.IJobSeekerFilterService;
 import com.example.myrh.service.IJobSeekerService;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,11 +29,14 @@ public class JobSeekerServiceImpl implements IJobSeekerService, IJobSeekerFilter
     private final JobSeekerRepo repository;
 
     private final JobSeekerMapper mapper;
+    private final IEmailService emailService;
+
 
     @Autowired
-    public JobSeekerServiceImpl(JobSeekerRepo repository, JobSeekerMapper mapper) {
+    public JobSeekerServiceImpl(JobSeekerRepo repository, JobSeekerMapper mapper, IEmailService emailService) {
         this.repository = repository;
         this.mapper = mapper;
+        this.emailService = emailService;
     }
 
     @Override
@@ -106,14 +110,36 @@ public class JobSeekerServiceImpl implements IJobSeekerService, IJobSeekerFilter
     }
 
     @Override
+
     public JobSeekerRes updateQuizSatut(Integer jobseekerId, String Datepassedexam, Boolean isvalidated) {
+
         JobSeeker existingJobSeeker = repository.findById(jobseekerId)
                 .orElseThrow(() -> new IllegalArgumentException("JobSeeker not found with id: " + jobseekerId));
 
         existingJobSeeker.setLastExamPassedDate(LocalDate.parse(Datepassedexam));
+
         existingJobSeeker.setValidated(isvalidated);
         existingJobSeeker.setPassedExams(existingJobSeeker.getPassedExams() + 1);
-        return mapper.toRes(repository.save(existingJobSeeker));
+        JobSeeker newJobSeeker = repository.save(existingJobSeeker);
 
+        if (isvalidated) {
+            String subject = "Account Validation";
+            String body = "Dear Job Seeker,\n\nYour account has been successfully validated.";
+            emailService.sendSimpleMailMessage(existingJobSeeker.getLast_name(), existingJobSeeker.getEmail(), subject, body);
+        }
+        return mapper.toRes(newJobSeeker);
+
+    }
+
+    @Override
+    public JobSeekerRes countAttemptsToZero(Integer jobseekerId) {
+        JobSeeker jobSeeker = repository.findById(jobseekerId)
+                .orElseThrow(() -> new IllegalArgumentException("JobSeeker not found with id: " + jobseekerId));
+
+        jobSeeker.setPassedExams(0);
+
+        JobSeeker updatedJobSeeker = repository.save(jobSeeker);
+
+        return mapper.toRes(updatedJobSeeker);
     }
 }
