@@ -18,7 +18,7 @@ public class JobSeeker extends Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int PassedExams;
-    private boolean isAvalidated;
+    private boolean validated;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate lastExamPassedDate;
     @ManyToOne(fetch = FetchType.LAZY)

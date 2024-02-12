@@ -16,6 +16,7 @@ public class OfferRes {
     private StudyLevel level;
     private OfferStatus status;
     private float salary;
+    private ProfileResponse offerProfile;
 
 
 }

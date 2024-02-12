@@ -14,10 +14,8 @@ import com.example.myrh.mapper.OfferMapper;
 import com.example.myrh.model.Company;
 import com.example.myrh.model.JobSeeker;
 import com.example.myrh.model.Offer;
-import com.example.myrh.repository.CompanyRepo;
-import com.example.myrh.repository.JobApplicantRepo;
-import com.example.myrh.repository.JobSeekerRepo;
-import com.example.myrh.repository.OfferRepo;
+import com.example.myrh.model.Profile;
+import com.example.myrh.repository.*;
 import com.example.myrh.service.IOfferService;
 import com.example.myrh.service.IOfferInsightsService;
 import com.example.myrh.specifications.OfferSpecifications;
@@ -37,25 +35,34 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
     private final OfferRepo repository;
     private final JobSeekerRepo jobSeekerRepository;
     private final JobApplicantRepo jobApplicantRepo;
+    private final ProfileRepository profileRepository;
     private final CompanyRepo companyRepo;
     private final OfferMapper mapper;
 
 
     @Autowired
-    public OfferServiceImpl(OfferRepo repository, JobSeekerRepo jobSeekerRepository, JobApplicantRepo jobApplicantRepo, CompanyRepo companyRepo, OfferMapper mapper) {
+    public OfferServiceImpl(OfferRepo repository, JobSeekerRepo jobSeekerRepository, JobApplicantRepo jobApplicantRepo, ProfileRepository profileRepository, CompanyRepo companyRepo, OfferMapper mapper) {
         this.repository = repository;
         this.jobSeekerRepository = jobSeekerRepository;
         this.jobApplicantRepo = jobApplicantRepo;
+        this.profileRepository = profileRepository;
         this.companyRepo = companyRepo;
         this.mapper = mapper;
     }
 
     @Override
-    public Page<OfferRes> search(int page, int size, String title, String description, String domain, String city, StudyLevel level, String job) {
-        Specification<Offer> spec = buildSpecification(title, description, domain, city, level, job);
+    public Page<OfferRes> search(int page, int size, String title, String description, String domain, String city, StudyLevel level, String job, String profile_id) {
+        Specification<Offer> spec = buildSpecification(title, description, domain, city, level, job, profile_id);
         if (size > 10) {
             size = 10;
         }
+
+//        if (profile_id != null) {
+//            Optional<Profile> profile = this.profileRepository.findById(Long.parseLong(profile_id));
+//            if (profile.isEmpty()) {
+//                throw new EntityNotFoundException("Profile Not Found");
+//            }
+//        }
 
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         return repository.findAll(spec, pageRequest).map(mapper::toRes);
@@ -76,7 +83,7 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
         }
     }
 
-    private Specification<Offer> buildSpecification(String title, String description, String domain, String city, StudyLevel level, String job) {
+    private Specification<Offer> buildSpecification(String title, String description, String domain, String city, StudyLevel level, String job, String profile_id) {
         Specification<Offer> spec = Specification.where(null);
 
 
@@ -103,6 +110,10 @@ public class OfferServiceImpl implements IOfferService, IOfferInsightsService {
         if (job != null) {
             spec = spec.and(OfferSpecifications.hasJob(job));
         }
+        if (profile_id != null) {
+            spec = spec.and(OfferSpecifications.hasProfile(profile_id));
+        }
+
 
         return spec;
 
