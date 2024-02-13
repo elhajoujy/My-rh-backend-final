@@ -8,3 +8,4 @@ EXPOSE 8080
 
 # Specify the command to run on container start
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
