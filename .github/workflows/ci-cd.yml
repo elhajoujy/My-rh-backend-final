@@ -32,7 +32,7 @@ jobs:
     steps:
       - name: Pull Image from docker hub
         run: sudo docker pull elhjoujy/my-rh-backend-v1:latest
-      - name: Delete old container
-        run: docker rm -f springboot-example-container
+      - name:  Delete old container
+        run: sudo docker rm -f springboot-example-container
       - name: Run docker container
-        run: docker  run -d -p 8080:8080 --name springboot-example-container elhjoujy/my-rh-backend-v1
+        run: sudo docker  run -d -p 8080:8080 --name springboot-example-container elhjoujy/my-rh-backend-v1
