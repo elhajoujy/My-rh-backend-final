@@ -26,8 +26,7 @@ public class EmailServiceImpl implements IEmailService {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setSubject(subject);
             message.setFrom(fromEmail);
-            fromEmail = "souirimehdi311@gmail.com";
-            message.setTo(fromEmail); // to
+            message.setTo(fromEmail);
             message.setText(body);
             emailSender.send(message);
         } catch (Exception exception) {
